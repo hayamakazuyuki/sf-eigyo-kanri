@@ -9,8 +9,10 @@ CHANNEL_ACCESS_TOKEN = os.environ.get('CHANNEL_ACCESS_TOKEN')
 CHANNEL_SECRET = os.environ.get('CHANNEL_SECRET')
 
 
-def create_app():
+def create_app(config_file='settings.py'):
     app = Flask(__name__)
+
+    app.config.from_pyfile(config_file)
 
     line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
     handler = WebhookHandler(CHANNEL_SECRET)
@@ -37,7 +39,7 @@ def create_app():
     def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text='樋渡記帳'))
+            TextSendMessage(text='完了'))
             # TextSendMessage(text=event.message.text))
 
     return app
