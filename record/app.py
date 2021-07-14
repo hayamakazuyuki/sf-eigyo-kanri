@@ -43,17 +43,26 @@ def create_app(config_file='settings.py'):
 
     @handler.add(MessageEvent, message=TextMessage)
     def handle_message(event):
-        user_id = event.source.user_id
-        msg_body = event.message.text
+        profile = line_bot_api.get_profile(event.source.user_id)
+        summary = line_bot_api.get_group_summary(event.source.group_id)
+
+        user_id = profile.user_id
+        display_name = profile.display_name
+        group_id = summary.group_id
+        message_id = event.message.id
+        message = event.message.text
 
         post = Post(
-            line_user_id=user_id,
-            message=msg_body
+            user_id=user_id,
+            display_name=display_name,
+            group_id=group_id,
+            message_id=message_id,
+            message=message
         )
         db.session.add(post)
         db.session.commit()
 
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=user_id))
+        # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=display_name))
         # TextSendMessage(text=event.message.text))
 
     return app
