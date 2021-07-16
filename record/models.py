@@ -10,3 +10,4 @@ class Post(db.Model):
     message_id = db.Column(db.String(255), nullable=False)
     message = db.Column(db.Text(), nullable=False)
     posted_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
+    checked = db.Column(db.Integer, nullable=True)
